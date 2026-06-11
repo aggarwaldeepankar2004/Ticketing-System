@@ -1,6 +1,13 @@
 import dotenv from 'dotenv';
 
-dotenv.config();
+const envFile =
+  process.env.NODE_ENV === 'production'
+    ? '.env.production'
+    : '.env.development';
+
+dotenv.config({ path: envFile });
+
+console.log(`Loaded ${envFile}`);
 
 const required = ['DB_HOST', 'DB_NAME', 'DB_USER', 'JWT_SECRET'];
 
@@ -33,3 +40,5 @@ export const env = {
     maxFileSizeMb: Number(process.env.MAX_FILE_SIZE_MB || 10),
   },
 };
+
+console.log(`Running in ${env.nodeEnv} mode`);
