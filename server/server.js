@@ -15,12 +15,24 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://ticketing-system-kappa-ten.vercel.app',
+  'https://ticketing-system-ej6ohjoee-aggarwaldeepankar2004s-projects.vercel.app'
+];
+
 app.use(helmet());
 app.use(
   cors({
-    origin: env.clientUrl,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
-  }),
+  })
 );
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
